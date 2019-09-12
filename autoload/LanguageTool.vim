@@ -103,7 +103,7 @@ endfunction
 function! LanguageTool#summary() "{{{1
     let l:errors = b:errors
     " Open a new window or jump to current
-    if !bufloaded('LanguageTool') && bufwinid('LanguageTool') < 0
+    if !bufloaded('LanguageTool')
         wincmd v
         e LanguageTool
         setlocal modifiable
