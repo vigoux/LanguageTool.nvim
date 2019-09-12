@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 11
+" Last Change:  2019 Sep 12
 " Version:      1.0
 "
 " License: {{{1
@@ -20,5 +20,6 @@ nnoremap <buffer><silent> f
             \ LanguageTool#errors#suggestionAtPoint())<CR>
 nnoremap <buffer><silent> ]] :execute LanguageTool#errors#nextSummary()<CR>
 nnoremap <buffer><silent> [[ :execute LanguageTool#errors#previousSummary()<CR>
+nnoremap <buffer><silent> q :q<CR>
 
 normal zx

@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 11
+" Last Change:  2019 Sep 12
 " Version:      1.0
 "
 " License: {{{1
@@ -106,6 +106,7 @@ function! LanguageTool#summary() "{{{1
     if !bufloaded('LanguageTool') && bufwinid('LanguageTool') < 0
         wincmd v
         e LanguageTool
+        setlocal modifiable
     else
         call win_gotoid(bufwinid('LanguageTool'))
         setlocal modifiable
