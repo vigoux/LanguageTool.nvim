@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 11
+" Last Change:  2019 Sep 12
 " Version:      1.0
 "
 " License: {{{1
@@ -18,7 +18,7 @@ function! LanguageTool#check#callback(output) "{{{1
 
     call LanguageTool#clear()
 
-    let l:file_content = system('cat ' . expand('%'))
+    let l:file_content = join(getline(1, '$'), "\n")
     let l:languagetool_text_winid = exists('*win_getid')
     \                             ? win_getid() : winnr()
 
