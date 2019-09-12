@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 11
+" Last Change:  2019 Sep 12
 " Version:      1.0
 "
 " License: {{{1
@@ -55,7 +55,7 @@ function! LanguageTool#errors#prettyprint(error, flags, ...) "{{{1
                 \ ['\(M{s}\)\@!\&M', ['Message:    '     . a:error.message]],
                 \ ['c', ['Context:    ' . a:error.context.text]],
                 \ ['C', has_key(a:error, 'replacements') ? 
-                    \ ['Corrections:'] + map(copy(a:error.replacements), '"    " . v:val.value') :
+                    \ ['Corrections:'] + map(copy(a:error.replacements), '"  " . v:val.value') :
                     \ []],
                 \ ['E{.\+}', ['More:']],
                 \ ['E{.*i.*}', has_key(a:error.rule.category, 'id') ?

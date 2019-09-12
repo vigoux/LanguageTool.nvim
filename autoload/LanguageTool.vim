@@ -125,8 +125,6 @@ function! LanguageTool#summary() "{{{1
     " We need to transfer the errors to this buffer
     let b:errors = l:errors
 
-    nnoremap <buffer><silent> q :q<CR>
-
     setlocal filetype=languagetool
     setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap nonumber norelativenumber noma
 endfunction
