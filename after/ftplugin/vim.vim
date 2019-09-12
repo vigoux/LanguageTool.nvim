@@ -11,6 +11,6 @@
 " }}}1
 
 let b:languagetool_preprocess_rules = [
-            \ ['^\(\s*"\)\([^"]\+\)$', LanguageTool#preprocess#getOutputAlternate(2, 1)],
+            \ ['^\(.*"\)\([^"]\+\)$', LanguageTool#preprocess#getOutputAlternate(2, 1)],
             \ ['.*', '{"markup":"{{0}}"}']
             \ ]
