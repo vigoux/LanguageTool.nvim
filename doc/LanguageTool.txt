@@ -19,7 +19,8 @@ Table of contents
 
 ============================================================================
 
-1. Overview                                           *languagetool-overview*
+1. Overview
+                                                       *languagetool-overview*
 
 This plugin integrates LanguageTool into Vim. LanguageTool is an Open Source
 style and grammar checker for English, French, German, etc. See
@@ -45,7 +46,8 @@ Warning: This plugin requieres `curl` to work.
 
 ============================================================================
 
-2. Screenshots                                     *languagetool-screenshots*
+2. Screenshots
+                                                    *languagetool-screenshots*
 
 If you don't have time to read help files, these screenshots will give you
 an idea of what the LanguageTool plugin does:
@@ -55,7 +57,8 @@ an idea of what the LanguageTool plugin does:
 
 ============================================================================
 
-3. Download                                           *languagetool-download*
+3. Download
+                                                       *languagetool-download*
 
 You can download the latest version of this plugin from:
 
@@ -67,7 +70,8 @@ LanguageTool can be downloaded from:
 
 ============================================================================
 
-4. Installation                                   *languagetool-installation*
+4. Installation
+                                                   *languagetool-installation*
 
 4.1 Installing the plugin~
 
@@ -156,7 +160,8 @@ See section |languagetool-configuration| for more optional settings.
 
 ============================================================================
 
-5. Configuration                                 *languagetool-configuration*
+5. Configuration
+                                                  *languagetool-configuration*
 
 LanguageTool plugin uses character encoding from the 'fenc' option or from
 the 'enc' option if 'fenc' is empty.
@@ -164,7 +169,11 @@ the 'enc' option if 'fenc' is empty.
 Several global variables can be set in your |vimrc| to configure the behavior
 of the LanguageTool plugin.
 
-g:languagetool_server                                 *g:languagetool_server*
+5.1 Options~
+                                                        *languagetool-options*
+
+g:languagetool_server
+                                                       *g:languagetool_server*
 
 This variable specifies the location of the LanguageTool java grammar
 checker server. Default is `$HOME/languagetool/languagetool-server.jar`.
@@ -178,7 +187,8 @@ g:languagetool_port
 This variable specifies the port that will be used by the server.
 Default value is `8081`.
 
-g:languagetool                                            *g:languagetool*
+g:languagetool
+                                                              *g:languagetool*
 
 All LanguageTool configuration goes through this varaible, which is organized
 as follows (all lists are comma separated):
@@ -211,8 +221,10 @@ in account to configure languagetool for a group of filetypes.
 To match for a filetype only, use its full name, if it can submatch something,
 add '^' at the start and '$' at the end of the key.
 
-g:languagetool_summary_flags                          *g:languagetool_summary_flags*
-g:languagetool_preview_flags                          *g:languagetool_preview_flags*
+g:languagetool_summary_flags
+g:languagetool_preview_flags
+                                                *g:languagetool_summary_flags*
+                                                *g:languagetool_preview_flags*
 
 This variable is used to configure how errors are displayed in the
 summary/preview window. You can configure this using flags as described below.
@@ -248,13 +260,15 @@ Default for both variable is "" which will be interpeted as
 `T{f}M{f}cCE{irRu}` (everything). In this variables the order of the flags
 doesn't matter, as long as modifiers come right after their flag.
 
-                         *LanguageToolErrorCount*     *LanguageToolCmd*
+5.2 Colors~
+                                                         *languagetool-colors*
+
+                         *LanguageToolErrorCount*
                          *LanguageToolGrammarError*   *LanguageToolLabel*
                          *LanguageToolSpellingError*  *LanguageToolUrl*
 
 You can also customize the following syntax highlighting groups: >
 
-    LanguageToolCmd
     LanguageToolErrorCount
     LanguageToolLabel
     LanguageToolUrl
@@ -272,9 +286,10 @@ colorscheme:
 
 ============================================================================
 
-6. Features                                           *languagetool-features*
+6. Features
+                                                       *languagetool-features*
 
-Commands~
+6.1 Commands~
 
 The LanguageTool plugin defines the following commands:
     |:LanguageToolCheck|
@@ -285,12 +300,14 @@ The LanguageTool plugin defines the following commands:
     |:LanguageToolFixAtPoint|
     |:LanguageToolSummary|
 
-:LanguageToolSetUp                                       *:LanguageToolSetUp*
+:LanguageToolSetUp
+                                                          *:LanguageToolSetUp*
 
 Use this command to run LanguageTool server. It is required to run this
 command before running |:LanguageToolCheck|.
 
-:LanguageToolCheck                                       *:LanguageToolCheck*
+:LanguageToolCheck
+                                                          *:LanguageToolCheck*
 
 Use the |:LanguageToolCheck| command to check the grammar in the current
 buffer. This will highlight errors in the buffer and populate the
@@ -301,7 +318,8 @@ triggered.
 Warning: LanguageTool don't behave well with tabs, if you encounter errors
 when using |:LanguageToolCheck| consider replacing tabs by spaces.
 
-:LanguageToolClear                                       *:LanguageToolClear*
+:LanguageToolClear
+                                                          *:LanguageToolClear*
 
 Use the |:LanguageToolClear| command to clear highlighting of grammar
 mistakes, close the scratch window containing the list of errors, clear
@@ -316,14 +334,16 @@ The two commands are also available from the menu in gvim: >
 
 This command opens more information on the error at point in the preview
 window.
-When in the preview window, you can fix the error by putting the cursor on a
-given correction and hitting <CR>.
+When in the preview window, you use |languagetool-mappings| to navigate and
+manipulate errors.
 
-:LanguageToolSupportedLanguages            *:LanguageToolSupportedLanguages*
+:LanguageToolSupportedLanguages
+                                             *:LanguageToolSupportedLanguages*
 
 Use this command to know which languages are supported by the server you have.
 
-:[count]LanguageToolFixAtPoint                    *:LanguageToolFixAtPoint*
+:[count]LanguageToolFixAtPoint
+                                                     *:LanguageToolFixAtPoint*
 
 This command uses [count]th suggestion to fix error at point (starting at
 index 0).
@@ -336,15 +356,16 @@ Note: Another solution is to fix the errors in reverse order, so that solving
 errors in the beginning of the document don't affect following error.
 Note: If errors still don't work as expected, rerun |:LanguageToolCheck|.
 
-:LanguageToolSummary                                 *:LanguageToolSummary*
+:LanguageToolSummary
+                                                        *:LanguageToolSummary*
 
 This command opens the summary window, which prints out all gramatical
 mistakes in the document.
 You can navigate them and see the suggestions.
-When on a given mistake, hitting <CR> will bring you the mistake.
-Hitting `f` on a suggestion will use this suggestion to fix the mistake.
+In this window, you can use |languagetool-mappings| to navigate and manipulate
+errors.
 
-Events~
+6.2 Events~
 
 LanguageTool provides some events to help customizing the behavior of the
 plugin :
@@ -358,16 +379,31 @@ you can do it like this :
     autocommand User LanguageToolCheckDone LanguageToolSummary
 <
 
-Mappings~
+6.3 Mappings~
+                                                       *languagetool-mappings*
 
 LanguageTool.nvim provides some mappings :
 
-<Plug>(LanguageToolCheck)       *i_<Plug>(LanguageToolCheck)* *<Plug>(LanguageToolCheck)*
+<Plug>(LanguageToolCheck)
+                     *i_<Plug>(LanguageToolCheck)* *<Plug>(LanguageToolCheck)*
 
 This mapping is available is normal and insert mode, and can be used to run a
 check.
 
-Using the Location-list~
+6.3.1 Summary window mappings~
+
+When in a summary window (either full or preview), the following mappings are
+provided :
+    `<CR>` to jump from the error summary to the error in the buffer.
+    `f` when on a correction of the current error, to use this correction to
+        fix the error.
+    `]]` to jump to next error.
+    `[[` to jump to previous error.
+    `q` to close the window.
+
+
+
+6.4 Using the Location-list~
 
 The |location-list| is populated when running |:LanguageToolCheck|. So you can
 use location-list Vim commands such as |:lopen| to open the location-list

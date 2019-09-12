@@ -7,7 +7,6 @@
 <Plug>(LanguageToolCheck)	LanguageTool.txt	/*<Plug>(LanguageToolCheck)*
 LanguageTool	LanguageTool.txt	/*LanguageTool*
 LanguageTool.txt	LanguageTool.txt	/*LanguageTool.txt*
-LanguageToolCmd	LanguageTool.txt	/*LanguageToolCmd*
 LanguageToolErrorCount	LanguageTool.txt	/*LanguageToolErrorCount*
 LanguageToolGrammarError	LanguageTool.txt	/*LanguageToolGrammarError*
 LanguageToolLabel	LanguageTool.txt	/*LanguageToolLabel*
@@ -19,10 +18,13 @@ g:languagetool_server	LanguageTool.txt	/*g:languagetool_server*
 g:languagetool_summary_flags	LanguageTool.txt	/*g:languagetool_summary_flags*
 i_<Plug>(LanguageToolCheck)	LanguageTool.txt	/*i_<Plug>(LanguageToolCheck)*
 languagetool-bugs	LanguageTool.txt	/*languagetool-bugs*
+languagetool-colors	LanguageTool.txt	/*languagetool-colors*
 languagetool-configuration	LanguageTool.txt	/*languagetool-configuration*
 languagetool-download	LanguageTool.txt	/*languagetool-download*
 languagetool-features	LanguageTool.txt	/*languagetool-features*
 languagetool-installation	LanguageTool.txt	/*languagetool-installation*
 languagetool-license	LanguageTool.txt	/*languagetool-license*
+languagetool-mappings	LanguageTool.txt	/*languagetool-mappings*
+languagetool-options	LanguageTool.txt	/*languagetool-options*
 languagetool-overview	LanguageTool.txt	/*languagetool-overview*
 languagetool-screenshots	LanguageTool.txt	/*languagetool-screenshots*
