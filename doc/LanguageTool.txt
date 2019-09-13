@@ -110,7 +110,7 @@ can choose to:
 
 * download standalone version of LanguageTool (LanguageTool-*.zip) from:
   http://www.languagetool.org/ using the orange button labeled
-  "Download LanguageTool for stand-alone use". The standalone version of
+  "Download LanguageTool for standalone use". The standalone version of
   Vim not only does grammar checking but also contains Hunspell dictionaries
   for spell checking.
 * or download a nightly build LanguageTool-.*-snapshot.zip from
@@ -120,10 +120,10 @@ can choose to:
 
 Recent versions of LanguageTool require Java-8.
 
-4.2.1 Download the stand-alone version of LanguageTool~
+4.2.1 Download the standalone version of LanguageTool~
 
-Download the stand-alone version of LanguageTool (LanguageTool-*.zip)
-from http://www.languagetool.org/, click on "LanguageTool stand-alone
+Download the standalone version of LanguageTool (LanguageTool-*.zip)
+from http://www.languagetool.org/, click on "LanguageTool standalone
 for your desktop" to download it. Unzip it: >
 
   $ unzip LanguageTool-3.6.zip
@@ -166,7 +166,7 @@ See section |languagetool-configuration| for more optional settings.
 LanguageTool plugin uses character encoding from the 'fenc' option or from
 the 'enc' option if 'fenc' is empty.
 
-Several global variables can be set in your |vimrc| to configure the behavior
+Several global variables can be set in your |.vimrc| to configure the behavior
 of the LanguageTool plugin.
 
 5.1 Options~
@@ -212,7 +212,7 @@ as follows (all lists are comma separated):
     }
 
 <
-Actually, there is more options than those found here, you can found an
+Actually, there are more options than those found here, you can found an
 exhaustive list here :
 https://languagetool.org/http-api/swagger-ui/#!/default/post_check
 
@@ -257,7 +257,7 @@ Available flags are :
         `u` : URLs associated with the error
 
 Default for both variable is "" which will be interpeted as
-`T{f}M{f}cCE{irRu}` (everything). In this variables the order of the flags
+`T{f}M{f}cCE{irRu}` (everything). In this variable the order of the flags
 doesn't matter, as long as modifiers come right after their flag.
 
 5.2 Colors~
@@ -367,7 +367,7 @@ errors.
 
 6.2 Events~
 
-LanguageTool provides some events to help customizing the behavior of the
+LanguageTool provides some events to help to customize the behavior of the
 plugin :
     |LanguageToolCheckDone|
     |LanguageToolServerStarted|

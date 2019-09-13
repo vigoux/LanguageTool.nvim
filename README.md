@@ -119,7 +119,7 @@ as follows (all lists are comma separated):
     }
 ```
 
-Actually, there is more options than those found here, you can found an
+Actually, there are more options than those found here, you can found an
 exhaustive list here :
 https://languagetool.org/http-api/swagger-ui/#!/default/post_check
 

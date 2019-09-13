@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 11
+" Last Change:  2019 Sep 13
 " Version:      1.0
 "
 " License: {{{1
@@ -23,7 +23,7 @@ function LanguageTool#server#start(file_path) "{{{1
               \ {'on_stdout': function('LanguageTool#server#stdoutHandler')})
 endfunction
 
-" This functions stops the server
+" This function stops the server
 function LanguageTool#server#stop() "{{{1
     if exists('s:languagetool_job')
         jobstop(s:languagetool_job)
@@ -31,7 +31,7 @@ function LanguageTool#server#stop() "{{{1
 endfunction
 
 
-" This functions handles the output of the server, to know when it has started,
+" This function handles the output of the server, to know when it has started,
 " or find errors
 function LanguageTool#server#stdoutHandler(job_id, stdout, event) "{{{1
     if string(a:stdout) =~? 'Server started'
@@ -65,14 +65,16 @@ function! LanguageTool#server#send(method, endpoint, data, callback) "{{{1
 
     " Let json magic happen
     if s:lt_server_started
-        let output_str = jobstart(l:languagetool_cmd, {'on_stdout' : function('LanguageTool#server#sendCallback', [a:callback])})
+        let output_str = jobstart(l:languagetool_cmd,
+                    \ {'on_stdout' : function('LanguageTool#server#sendCallback', [a:callback]),
+                    \ 'stdout_buffered':v:true })
     else
         echomsg 'LanguageTool server offline...'
         call a:callback({})
     endif
 endfunction
 
-" This function is the callback for the send function, it calls callback with parsed json
+" This function is the callback for the 'send' function, it calls callback with parsed json
 " data as argument
 function! LanguageTool#server#sendCallback(callback, job_id, data, event) "{{{1
     if a:event == 'stdout' && !empty(join(a:data))

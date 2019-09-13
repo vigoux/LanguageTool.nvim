@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 11
+" Last Change:  2019 Sep 13
 " Version:      1.0
 "
 " License: {{{1
@@ -51,7 +51,7 @@ function! LanguageTool#config#setup() "{{{1
             echoerr 'Failed to guess language from spelllang=['
             \ . &spelllang . '] or from v:lang=[' . v:lang . ']. '
             \ . 'Defaulting to English (en-US). '
-            \ . 'See ":help LanguageTool" regarding setting g:languagetool_lang.'
+            \ . 'See ":help LanguageTool" regarding setting language in g:languagetool.'
             let l:lang = 'en-US'
         endif
     endif

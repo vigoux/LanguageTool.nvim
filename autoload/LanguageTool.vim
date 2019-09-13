@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 12
+" Last Change:  2019 Sep 13
 " Version:      1.0
 "
 " License: {{{1
@@ -56,7 +56,7 @@ function! LanguageTool#clear() "{{{1
     lclose
 endfunction
 
-" This functions shows the error at point in the preview window
+" This function shows the error at point in the preview window
 function! LanguageTool#showErrorAtPoint() "{{{1
     let error = LanguageTool#errors#find()
     if !empty(error)
@@ -98,7 +98,7 @@ function! LanguageTool#fixErrorAtPoint(sug_id) "{{{1
     call LanguageTool#errors#fix(LanguageTool#errors#find(), a:sug_id)
 endfunction
 
-" This functions opens a new window with all errors in the current buffer
+" This function opens a new window with all errors in the current buffer
 " and mappings to navigate to them, and fix them
 function! LanguageTool#summary() "{{{1
     let l:errors = b:errors
