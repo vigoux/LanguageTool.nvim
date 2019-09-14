@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 13
+" Last Change:  2019 Sep 14
 " Version:      1.0
 "
 " License: {{{1
@@ -113,14 +113,13 @@ function! LanguageTool#summary() "{{{1
         execute '0,$delete'
     endif
 
+    let l:to_put = []
 
     for l:error in l:errors
-        call append(line('.') - 1, LanguageTool#errors#prettyprint(l:error, s:summary_pp_flags, line('.') - 1))
-        call append(line('.') - 1, '')
+        let l:to_put += LanguageTool#errors#getSummary(l:error, s:summary_pp_flags)
     endfor
 
-    execute '$delete'
-    execute 'goto 1'
+    call nvim_buf_set_lines(0, 0, -1, v:false, l:to_put)
 
     " We need to transfer the errors to this buffer
     let b:errors = l:errors

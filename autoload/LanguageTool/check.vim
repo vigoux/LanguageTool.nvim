@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 12
+" Last Change:  2019 Sep 14
 " Version:      1.0
 "
 " License: {{{1
@@ -57,7 +57,7 @@ function! LanguageTool#check#callback(output) "{{{1
     " Also highlight errors in original buffer and populate location list.
     setlocal errorformat=%f:%l:%c:%m
     for l:error in b:errors
-        let l:re = LanguageTool#errors#highlightRegex(l:error.fromy, l:error)
+        let l:re = LanguageTool#errors#highlightRegex(l:error)
 
         if l:error.rule.id =~# 'HUNSPELL_RULE\|HUNSPELL_NO_SUGGEST_RULE\|MORFOLOGIK_RULE_\|_SPELLING_RULE\|_SPELLER_RULE'
             call matchadd('LanguageToolSpellingError', l:re)

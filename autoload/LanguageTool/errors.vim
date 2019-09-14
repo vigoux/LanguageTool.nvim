@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 12
+" Last Change:  2019 Sep 14
 " Version:      1.0
 "
 " License: {{{1
@@ -32,7 +32,7 @@ endfunction
 " This functions appends a pretty printed version of current error at the end of the current buffer
 " flags can be used to customize how pretty print is done, see doc for more information
 " set the third argument as start line of the pp to highlight context
-function! LanguageTool#errors#prettyprint(error, flags, ...) "{{{1
+function! LanguageTool#errors#getSummary(error, flags) "{{{1
     let l:pretty_print = []
 
     if empty(a:flags)
@@ -73,8 +73,11 @@ function! LanguageTool#errors#prettyprint(error, flags, ...) "{{{1
     for [l:flag_part, l:str_to_add] in l:flag_pp_part
         if l:flags =~# '\m' . l:flag_part && !empty(l:str_to_add)
             let l:pretty_print += l:str_to_add
-            if l:flag_part ==# 'c' && len(a:000) > 0
-                let l:re = LanguageTool#errors#highlightRegex(a:000[-1] + len(l:pretty_print), a:error)
+            if l:flag_part ==# 'c'
+                let l:re =
+                            \ '\mError:\s\+' . (a:error.index + 1)
+                            \ . '\_.\{-}Context:.*\zs' . LanguageTool#errors#getText(a:error) . '\ze'
+                            \ . '\_.\{-}\_^\_$'
 
                 if a:error.rule.id =~# 'HUNSPELL_RULE\|HUNSPELL_NO_SUGGEST_RULE\|MORFOLOGIK_RULE_\|_SPELLING_RULE\|_SPELLER_RULE'
                     call matchadd('LanguageToolSpellingError', l:re)
@@ -85,23 +88,16 @@ function! LanguageTool#errors#prettyprint(error, flags, ...) "{{{1
         endif
     endfor
 
-    return l:pretty_print
+    return l:pretty_print + ['']
 endfunction
 
 " Return a regular expression used to highlight a grammatical error
 " at line a:line in text.  The error starts at character a:start in
 " context a:context and its length in context is a:len.
-function! LanguageTool#errors#highlightRegex(line, error)  "{{{1
-    let l:start_idx     = byteidxcomp(a:error.context.text, a:error.context.offset)
-    let l:end_idx       = byteidxcomp(a:error.context.text, a:error.context.offset + a:error.context.length) - 1
-    let l:start_ctx_idx = byteidxcomp(a:error.context.text, a:error.context.offset + a:error.context.length)
-    let l:end_ctx_idx   = byteidxcomp(a:error.context.text, a:error.context.offset + a:error.context.length + 5) - 1
-
+function! LanguageTool#errors#highlightRegex(error)  "{{{1
     " The location prefix is used to match only at the point of the actual
     " error and not multiple times accross the line/text
-    if a:line != a:error.fromy
-        let l:location_prefix = '\%' . a:line . 'l\&'
-    elseif a:error.fromy == a:error.toy
+    if a:error.fromy == a:error.toy
         let l:location_prefix = '\%' . a:error.fromy . 'l'
                     \ . '\%>' . (a:error.fromx - 1) . 'c'
                     \ . '\%<' . (a:error.tox + 1) . 'c'
@@ -116,13 +112,21 @@ function! LanguageTool#errors#highlightRegex(line, error)  "{{{1
     " We use \< and \> because all errors start at the beginning of
     " a word and end at the end of a word
     return  '\V' . l:location_prefix . '\<'
-    \     . substitute(escape(a:error.context.text[l:start_idx : l:end_idx], '''.\'), ' ', '\\_\\s', 'g')
+    \     . LanguageTool#errors#getText(a:error)
     \     . '\>\ze'
+endfunction
+
+" This function returns the actual errored text of a:error
+function! LanguageTool#errors#getText(error)
+    let l:start_idx     = byteidxcomp(a:error.context.text, a:error.context.offset)
+    let l:end_idx       = byteidxcomp(a:error.context.text, a:error.context.offset + a:error.context.length) - 1
+
+    return substitute(escape(a:error.context.text[l:start_idx : l:end_idx], '''.\'), ' ', '\\_\\s', 'g')
 endfunction
 
 " This function uses suggestion sug_id to fix error error
 function! LanguageTool#errors#fix(error, sug_id) "{{{1
-    let l:location_regex = LanguageTool#errors#highlightRegex(a:error.fromy, a:error)
+    let l:location_regex = LanguageTool#errors#highlightRegex(a:error)
     let l:fix = a:error.replacements[a:sug_id].value
 
     call win_gotoid(a:error.source_win)
@@ -167,7 +171,7 @@ function! LanguageTool#errors#jumpToCurrentError() "{{{1
             exe 'norm! ' . (l:col  - 1) . 'l'
         endif
 
-        echon 'Jump to error ' . LanguageTool#errors#prettyprint(l:error, 'T{s}')[0]
+        echon 'Jump to error ' . LanguageTool#errors#getSummary(l:error, 'T{s}')[0]
         norm! zz
     endif
 endfunction
