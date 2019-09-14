@@ -67,7 +67,7 @@ function! LanguageTool#showErrorAtPoint() "{{{1
 
         call clearmatches()
 
-        call append(line('.') - 1, LanguageTool#errors#prettyprint(l:error, s:preview_pp_flags))
+        call nvim_buf_set_lines(0, 0, -1, v:false, LanguageTool#errors#getSummary(l:error, s:preview_pp_flags))
 
         let b:error = l:error
 
