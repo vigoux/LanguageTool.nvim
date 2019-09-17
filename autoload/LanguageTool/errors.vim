@@ -11,7 +11,7 @@
 " }}} 1
 
 " This functions finds the error at point
-function! LanguageTool#errors#find() "{{{1
+function! LanguageTool#errors#errorAtPoint() "{{{1
     if !exists('b:errors')
         echoerr 'Please run :LanguageToolCheck'
         return {}
@@ -136,7 +136,7 @@ function! LanguageTool#errors#fix(error, sug_id) "{{{1
 endfunction
 
 " This function is used on the description of an error to get the underlying data
-function! LanguageTool#errors#errorAtPoint() "{{{1
+function! LanguageTool#errors#summaryAtPoint() "{{{1
     let l:save_cursor = getpos('.')
     norm! $
     if search('^Error:\s\+', 'beW') > 0
@@ -156,7 +156,7 @@ endfunction
 " Jump to a grammar mistake (called when pressing <Enter>
 " on a particular error in scratch buffer).
 function! LanguageTool#errors#jumpToCurrentError() "{{{1
-    let l:error = LanguageTool#errors#errorAtPoint()
+    let l:error = LanguageTool#errors#summaryAtPoint()
     if !empty(l:error)
         let l:line = l:error.fromy
         let l:col  = l:error.fromx

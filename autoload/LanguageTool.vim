@@ -58,27 +58,17 @@ endfunction
 
 " This function shows the error at point in the preview window
 function! LanguageTool#showErrorAtPoint() "{{{1
-    let error = LanguageTool#errors#find()
-    if !empty(error)
+    let l:error = LanguageTool#errors#errorAtPoint()
+    if !empty(l:error)
         " Open preview window and jump to it
-        pedit LanguageToolError
+        pedit
         wincmd P
-        setlocal modifiable
+        let l:window = win_getid()
+        wincmd p
 
-        call clearmatches()
+        normal zx
 
-        call nvim_buf_set_lines(0, 0, -1, v:false, LanguageTool#errors#getSummary(l:error, s:preview_pp_flags))
-
-        let b:error = l:error
-
-        setlocal filetype=languagetool
-        setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap nonumber norelativenumber noma
-        " Map <CR> to fix error with suggestion at point
-        nnoremap <buffer> f :call LanguageTool#fixErrorWithSuggestionAtPoint()<CR>
-
-        " Return to original window
-        exe "norm! \<C-W>\<C-P>"
-        return
+        call LanguageTool#ui#displayErrors(l:window, [l:error], s:preview_pp_flags)
     endif
 endfunction
 
@@ -95,35 +85,18 @@ endfunction
 
 " This function is used to fix the error at point using suggestion nr sug_id
 function! LanguageTool#fixErrorAtPoint(sug_id) "{{{1
-    call LanguageTool#errors#fix(LanguageTool#errors#find(), a:sug_id)
+    call LanguageTool#errors#fix(LanguageTool#errors#errorAtPoint(), a:sug_id)
 endfunction
 
 " This function opens a new window with all errors in the current buffer
 " and mappings to navigate to them, and fix them
 function! LanguageTool#summary() "{{{1
-    let l:errors = b:errors
     " Open a new window or jump to current
     if !bufloaded('LanguageTool')
         wincmd v
-        e LanguageTool
-        setlocal modifiable
+        let l:window = win_getid()
     else
-        call win_gotoid(bufwinid('LanguageTool'))
-        setlocal modifiable
-        execute '0,$delete'
+        let l:window = bufwinid('LanguageTool')
     endif
-
-    let l:to_put = []
-
-    for l:error in l:errors
-        let l:to_put += LanguageTool#errors#getSummary(l:error, s:summary_pp_flags)
-    endfor
-
-    call nvim_buf_set_lines(0, 0, -1, v:false, l:to_put)
-
-    " We need to transfer the errors to this buffer
-    let b:errors = l:errors
-
-    setlocal filetype=languagetool
-    setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap nonumber norelativenumber noma
+    call LanguageTool#ui#displayErrors(l:window, b:errors, s:summary_pp_flags)
 endfunction
