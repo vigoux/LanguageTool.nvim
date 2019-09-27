@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 14
+" Last Change:  2019 Sep 27
 " Version:      1.0
 "
 " License: {{{1
@@ -126,4 +126,34 @@ function! LanguageTool#summary() "{{{1
 
     setlocal filetype=languagetool
     setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap nonumber norelativenumber noma
+endfunction
+
+" }}}1
+
+
+" This function starts the remote-plugin
+
+function! LanguageTool#getCommand()
+
+    let s:socket = serverlist()[0]
+    let l:plugin_path = expand('<sfile>:p:h')
+    let l:command = l:plugin_path . '/gradlew run --args="' . s:socket . '" > ' . l:plugin_path . '/LanguageTool.logs'
+
+    return l:command
+endfunction
+
+function! LanguageTool#start()
+    let s:job = jobstart(LanguageTool#getCommand())
+endfunction
+
+function! LanguageTool#getChannelId()
+    return s:job
+endfunction
+
+function! LanguageTool#stop()
+    call jobstop(s:job)
+endfunction
+
+" This function sends a:command to the running remote plugin
+function! LanguageTool#sendCommand(command, ...)
 endfunction

@@ -42,19 +42,19 @@ if has("gui_running") && has("menu") && &go =~# 'm'
 endif
 
 " Defines commands {{{1
-command! -bar -nargs=0 LanguageToolClear :call LanguageTool#clear()
-command! -bar -nargs=0 LanguageToolCheck :call LanguageTool#check()
-command! -bar -nargs=0 LanguageToolErrorAtPoint :call LanguageTool#showErrorAtPoint()
-command! -nargs=0 LanguageToolSummary :call LanguageTool#summary()
-command! -nargs=0 LanguageToolSetUp :call LanguageTool#setup()
-command! -nargs=0 LanguageToolSupportedLanguages :call LanguageTool#languages#supportedLanguages()
-command! -nargs=0 -count=0 LanguageToolFixAtPoint :call LanguageTool#fixErrorAtPoint(<count>)
+" command! -bar -nargs=0 LanguageToolClear :call LanguageTool#clear()
+" command! -bar -nargs=0 LanguageToolCheck :call LanguageTool#check()
+" command! -bar -nargs=0 LanguageToolErrorAtPoint :call LanguageTool#showErrorAtPoint()
+" command! -nargs=0 LanguageToolSummary :call LanguageTool#summary()
+" command! -nargs=0 LanguageToolSetUp :call LanguageTool#setup()
+" command! -nargs=0 LanguageToolSupportedLanguages :call LanguageTool#languages#supportedLanguages()
+" command! -nargs=0 -count=0 LanguageToolFixAtPoint :call LanguageTool#fixErrorAtPoint(<count>)
 
 " Provide mappings {{{1
-nmap <silent> <Plug>(LanguageToolCheck) :<C-U>LanguageToolCheck<CR>
-imap <silent> <Plug>(LanguageToolCheck) <C-O>:<C-U>LanguageToolCheck<CR>
+" nmap <silent> <Plug>(LanguageToolCheck) :<C-U>LanguageToolCheck<CR>
+" imap <silent> <Plug>(LanguageToolCheck) <C-O>:<C-U>LanguageToolCheck<CR>
 
 " Autocommands {{{1
-autocmd VimLeave * call LanguageTool#server#stop()
+" autocmd VimLeave * call LanguageTool#server#stop()
 
 " vim: fdm=marker

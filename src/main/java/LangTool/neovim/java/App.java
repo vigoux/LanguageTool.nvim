@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
 import com.ensarsarajcic.neovim.java.api.NeovimStreamApi;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientType;
+import com.ensarsarajcic.neovim.java.api.types.api.ClientVersionInfo;
 import com.ensarsarajcic.neovim.java.api.types.msgpack.NeovimJacksonModule;
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCClient;
 import com.ensarsarajcic.neovim.java.corerpc.client.RPCConnection;
@@ -72,5 +74,7 @@ public class App {
 
         this.handlerManager.registerNeovimHandler(new LTCommandHandler(this.nvimApi));
         this.handlerManager.attachToStream(this.rpcStream);
+
+        this.nvimApi.setClientInfo("LanguageTool.nvim", new ClientVersionInfo(0, 1, 0, ""), ClientType.REMOTE, null, null);
     }
 }

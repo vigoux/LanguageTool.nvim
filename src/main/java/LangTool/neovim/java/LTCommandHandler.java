@@ -2,11 +2,14 @@ package LangTool.neovim.java;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import org.languagetool.JLanguageTool;
 import org.languagetool.language.BritishEnglish;
 import org.languagetool.rules.RuleMatch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ensarsarajcic.neovim.java.api.NeovimApi;
 import com.ensarsarajcic.neovim.java.api.buffer.NeovimBufferApi;
@@ -16,9 +19,12 @@ import com.ensarsarajcic.neovim.java.handler.annotations.NeovimNotificationHandl
 
 public class LTCommandHandler {
 
+    public static final Logger logger = LoggerFactory.getLogger(App.class);
     private NeovimApi nvimApi;
     private int channelId;
     private JLanguageTool langTool;
+    private HashMap<NeovimBufferApi, List<RuleMatch>> errors;
+    private int namespace;
 
     public LTCommandHandler(NeovimApi nvimApi) throws InterruptedException, ExecutionException {
         this.nvimApi = nvimApi;
@@ -31,17 +37,19 @@ public class LTCommandHandler {
                 "let LanguageToolCheckJava = {-> rpcnotify(" + this.channelId + ", 'LTCommand', 'Check')}");
 
         this.langTool = new JLanguageTool(new BritishEnglish());
+
+        this.errors = new HashMap<NeovimBufferApi, List<RuleMatch>>();
+        this.namespace = 0;
     }
 
     @NeovimNotificationHandler("LTCommand")
     public void handleCommand(NotificationMessage message) throws InterruptedException, ExecutionException {
-        System.out.println("Received : " + message);
-
         List<?> arguments = message.getArguments();
 
         if (arguments.size() < 1){
-            System.out.println("Received and invalid command : " + message.toString());
+            LTCommandHandler.logger.warn("Received and invalid command : %s", message.toString());
         } else {
+            LTCommandHandler.logger.info("Received : %s", message.toString());
 
             /*
              * Main part of the handler, the one which dispatches tasks
@@ -49,57 +57,61 @@ public class LTCommandHandler {
 
             switch (arguments.get(0).toString()) {
                 case "Check":
-                    System.out.println("Gettting current buffer...");
-                    NeovimBufferApi buffer = this.nvimApi.getCurrentBuffer().get();
-                    System.out.println("Got buffer");
-
-                    System.out.println("Checking : " + buffer.getName().get());
-                    buffer.getLines(0, -1, false).thenAccept(this::checkLines);
+                    LTCommandHandler.logger.info("Gettting current buffer...");
+                    this.nvimApi.getCurrentBuffer().thenAccept(this::checkBuffer);
                     break;
                 default:
-                    System.out.println(arguments.get(0) + " is not a valid command.");
+                    LTCommandHandler.logger.warn("%s is not a valid command.", arguments.get(0));
             }
         }
     }
 
-    private void checkLines(List<String> lines) {
+    private void checkBuffer(NeovimBufferApi buffer) {
         List<RuleMatch> matches;
         try {
 
+            LTCommandHandler.logger.info("Checking : %s.", buffer.getName().get());
+            List<String> lines = buffer.getLines(0, -1, false).get();
             matches = this.langTool.check(String.join("\n", lines));
 
             for (RuleMatch match : matches) {
-                this.displayError(match, lines);
+                this.displayError(match, buffer, lines);
             }
 
+            this.errors.put(buffer, matches);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LTCommandHandler.logger.error("An error occured %s", e);
+        } catch (InterruptedException e) {
+            LTCommandHandler.logger.error("An error occured %s", e);
+        } catch (ExecutionException e) {
+            LTCommandHandler.logger.error("An error occured %s", e);
         }
     }
 
-    private void displayError(RuleMatch rule, List<String> sourceText) {
-        LanguageToolLineCol start = this.retrieveLineCol(rule.getFromPos(), sourceText);
-        LanguageToolLineCol stop = this.retrieveLineCol(rule.getToPos() - 1, sourceText);
+    private void displayError(RuleMatch rule, NeovimBufferApi buffer, List<String> lines) throws InterruptedException, ExecutionException {
+        LanguageToolLineCol start = new LanguageToolLineCol(rule.getFromPos(), lines);
+        LanguageToolLineCol stop = new LanguageToolLineCol(rule.getToPos(), lines);
 
-        String erroredText = String.join("\n", sourceText).subSequence(rule.getFromPos(), rule.getToPos()).toString();
+        // String erroredText = String.join("\n", lines).subSequence(rule.getFromPos(), rule.getToPos()).toString();
 
-        System.out.println(erroredText);
-        System.out.println(start);
-        System.out.println(stop);
+        this.addHighlight(buffer,"LanguageToolGrammarError", start, stop);
     }
 
+    private void addHighlight(NeovimBufferApi buffer, String hlGroup, LanguageToolLineCol start, LanguageToolLineCol stop) {
+        if ( start.getLine() == stop.getLine() ) {
+            buffer.addHighlight(this.namespace, hlGroup, start.getLine(), start.getCol(), stop.getCol());
+        } else {
 
-    private LanguageToolLineCol retrieveLineCol(int index, List<String> sourceText) {
-        int lineCount = 0;
-        for (String line : sourceText) {
-            if ( line.length() > index ) {
-                break;
-            } else {
-                index -= (line.length() + 1);
-                lineCount += 1;
+            // Highlight first line of error
+            buffer.addHighlight(this.namespace, hlGroup, start.getLine(), start.getCol(), -1);
+
+            // Lines in between
+            for (int line = start.getLine() + 1; line < stop.getLine(); line++) {
+                buffer.addHighlight(this.namespace, hlGroup, line, 0, -1);
             }
+
+            // Highlight last line
+            buffer.addHighlight(this.namespace, hlGroup, stop.getLine(), 0, stop.getCol());
         }
-        return new LanguageToolLineCol(lineCount + 1, index + 1);
     }
 }
