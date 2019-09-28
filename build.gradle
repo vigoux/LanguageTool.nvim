@@ -28,9 +28,9 @@ dependencies {
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
-    compile 'com.ensarsarajcic.neovim.java:neovim-api:0.1.13'
-    compile 'com.ensarsarajcic.neovim.java:handler-annotations:0.1.13'
-    compile 'com.ensarsarajcic.neovim.java:unix-socket-connection:0.1.13'
+    compile 'com.ensarsarajcic.neovim.java:neovim-api:0.1.+'
+    compile 'com.ensarsarajcic.neovim.java:handler-annotations:0.1.+'
+    compile 'com.ensarsarajcic.neovim.java:unix-socket-connection:0.1.+'
     compile 'org.languagetool:language-all:4.6'
 
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
