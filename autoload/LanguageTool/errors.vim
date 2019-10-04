@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 14
+" Last Change:  2019 Oct 04
 " Version:      1.0
 "
 " License: {{{1
@@ -41,6 +41,7 @@ function! LanguageTool#errors#getSummary(error, flags) "{{{1
         let l:flags = a:flags
     endif
 
+    " Flags construction
     let l:flag_pp_part = [
                 \ ['T{s}', [(a:error.index + 1) . ' / ' . a:error.nr_errors
                     \ . ' @ ' . a:error.fromy . 'L ' . a:error.fromx . 'C : '
@@ -70,9 +71,12 @@ function! LanguageTool#errors#getSummary(error, flags) "{{{1
                     \ []]
                 \ ]
 
+    " Iterate over the flags and build the requested summary
     for [l:flag_part, l:str_to_add] in l:flag_pp_part
         if l:flags =~# '\m' . l:flag_part && !empty(l:str_to_add)
             let l:pretty_print += l:str_to_add
+
+            " if the flag is the context, we have to highlight it
             if l:flag_part ==# 'c'
                 let l:re =
                             \ '\mError:\s\+' . (a:error.index + 1)

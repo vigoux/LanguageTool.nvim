@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 14
+" Last Change:  2019 Oct 04
 " Version:      1.0
 "
 " License: {{{1
@@ -60,25 +60,13 @@ endfunction
 function! LanguageTool#showErrorAtPoint() "{{{1
     let error = LanguageTool#errors#find()
     if !empty(error)
-        " Open preview window and jump to it
+        " Open preview window and get its win_id
         pedit LanguageToolError
         wincmd P
-        setlocal modifiable
-
-        call clearmatches()
-
-        call nvim_buf_set_lines(0, 0, -1, v:false, LanguageTool#errors#getSummary(l:error, s:preview_pp_flags))
-
-        let b:error = l:error
-
-        setlocal filetype=languagetool
-        setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap nonumber norelativenumber noma
-        " Map <CR> to fix error with suggestion at point
-        nnoremap <buffer> f :call LanguageTool#fixErrorWithSuggestionAtPoint()<CR>
-
-        " Return to original window
+        let win_id = win_getid()
         exe "norm! \<C-W>\<C-P>"
-        return
+
+        call LanguageTool#ui#displayInWindow([l:error], win_id, 'LanguageToolError', s:preview_pp_flags)
     endif
 endfunction
 
@@ -103,27 +91,15 @@ endfunction
 function! LanguageTool#summary() "{{{1
     let l:errors = b:errors
     " Open a new window or jump to current
-    if !bufloaded('LanguageTool')
+    if !bufloaded('LanguageToolSummary')
         wincmd v
-        e LanguageTool
+        let l:window = win_getid()
+        exe 'norm! \<C-W>\<C-P>'
         setlocal modifiable
     else
-        call win_gotoid(bufwinid('LanguageTool'))
+        let l:window = bufwinid('LanguageToolSummary')
         setlocal modifiable
-        execute '0,$delete'
     endif
 
-    let l:to_put = []
-
-    for l:error in l:errors
-        let l:to_put += LanguageTool#errors#getSummary(l:error, s:summary_pp_flags)
-    endfor
-
-    call nvim_buf_set_lines(0, 0, -1, v:false, l:to_put)
-
-    " We need to transfer the errors to this buffer
-    let b:errors = l:errors
-
-    setlocal filetype=languagetool
-    setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap nonumber norelativenumber noma
+    call LanguageTool#ui#displayInWindow(l:errors, l:window, 'LanguageToolSummary', s:summary_pp_flags)
 endfunction
