@@ -17,7 +17,7 @@ function! LanguageTool#setup() "{{{1
     let s:summary_pp_flags = get(g:, 'languagetool_summary_flags', '')
     let s:preview_pp_flags = get(g:, 'languagetool_preview_flags', '')
 
-    if !filereadable(expand(s:languagetool_server))
+    if !filereadable(expand(s:languagetool_server, v:true))
         echomsg "LanguageTool cannot be found at: " . s:languagetool_server
         echomsg "You need to install LanguageTool and/or set up g:languagetool_server"
         echomsg "to indicate the location of the languagetool-server.jar file."
