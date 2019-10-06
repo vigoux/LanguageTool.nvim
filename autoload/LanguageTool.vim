@@ -64,14 +64,19 @@ endfunction
 function! LanguageTool#showErrorAtPoint() "{{{1
     let error = LanguageTool#errors#find()
     if !empty(error)
-        " Open preview window and get its win_id
-        " pedit LanguageToolError
-        " wincmd P
-        " let win_id = win_getid()
-        " exe "norm! \<C-W>\<C-P>"
-        let win_id = LanguageTool#ui#createTemporaryFloatWin()
 
-        call LanguageTool#ui#displayInWindow([l:error], win_id, 'LanguageToolError', 'T{s}')
+        " If it is possible to open a floatting window, open it
+        if exists('g:languagetool_useFloatting') && has('nvim-0.4')
+            let win_id = LanguageTool#ui#createTemporaryFloatWin()
+        else
+            " Open preview window and get its win_id
+            pedit LanguageToolError
+            wincmd P
+            let win_id = win_getid()
+            exe "norm! \<C-W>\<C-P>"
+        endif
+
+        call LanguageTool#ui#displayInWindow([l:error], win_id, 'LanguageToolError', s:preview_pp_flags)
     endif
 endfunction
 

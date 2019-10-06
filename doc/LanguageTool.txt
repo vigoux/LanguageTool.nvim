@@ -260,6 +260,14 @@ Default for both variable is "" which will be interpeted as
 `T{f}M{f}cCE{irRu}` (everything). In this variable the order of the flags
 doesn't matter, as long as modifiers come right after their flag.
 
+g:languagetool_useFloatting
+                                                 *g:languagetool_useFloatting*
+Set this variable to use floatting windows with |LanguageToolErrorAtPoint|.
+Note: You might want to set the following :
+>
+    let g:languagetool_useFloatting = 1
+    let g:languagetool_preview_flags = 'M'
+
 5.2 Colors~
                                                          *languagetool-colors*
 

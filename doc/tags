@@ -16,6 +16,7 @@ g:languagetool	LanguageTool.txt	/*g:languagetool*
 g:languagetool_preview_flags	LanguageTool.txt	/*g:languagetool_preview_flags*
 g:languagetool_server	LanguageTool.txt	/*g:languagetool_server*
 g:languagetool_summary_flags	LanguageTool.txt	/*g:languagetool_summary_flags*
+g:languagetool_useFloatting	LanguageTool.txt	/*g:languagetool_useFloatting*
 i_<Plug>(LanguageToolCheck)	LanguageTool.txt	/*i_<Plug>(LanguageToolCheck)*
 languagetool-bugs	LanguageTool.txt	/*languagetool-bugs*
 languagetool-colors	LanguageTool.txt	/*languagetool-colors*
