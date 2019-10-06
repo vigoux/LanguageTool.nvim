@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Oct 04
+" Last Change:  2019 Oct 06
 " Version:      1.0
 "
 " License: {{{1
@@ -39,12 +39,12 @@ function! LanguageTool#ui#displayInWindow(errors, window, buffername, flags) "{{
 endfunction "}}}1
 
 " This function opens a temporary floatting window that will be closed on CursorMoved
-function! LanguageTool#ui#createTemporaryFloatWin() "{{{
+function! LanguageTool#ui#createTemporaryFloatWin(width, height) "{{{
     let s:lt_temp_win = nvim_open_win(0, v:false,
                 \ {
                 \ 'relative' : 'cursor',
-                \ 'width' : 50,
-                \ 'height' : 2,
+                \ 'width' : a:width,
+                \ 'height' : a:height,
                 \ 'row' : 1,
                 \ 'col' : 1,
                 \ 'style' : 'minimal'

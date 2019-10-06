@@ -67,7 +67,10 @@ function! LanguageTool#showErrorAtPoint() "{{{1
 
         " If it is possible to open a floatting window, open it
         if exists('g:languagetool_useFloatting') && has('nvim-0.4')
-            let win_id = LanguageTool#ui#createTemporaryFloatWin()
+            let text = LanguageTool#errors#getSummary(error, s:preview_pp_flags)
+            let height = len(text) - 1 " Because by default an empty line is appended at the end
+            let width = max(map(text, 'len(v:val)'))
+            let win_id = LanguageTool#ui#createTemporaryFloatWin(width, height)
         else
             " Open preview window and get its win_id
             pedit LanguageToolError
