@@ -37,3 +37,28 @@ function! LanguageTool#ui#displayInWindow(errors, window, buffername, flags) "{{
 
     call nvim_win_set_buf(a:window, buffer)
 endfunction "}}}1
+
+" This function opens a temporary floatting window that will be closed on CursorMoved
+function! LanguageTool#ui#createTemporaryFloatWin() "{{{
+    let s:lt_temp_win = nvim_open_win(0, v:false,
+                \ {
+                \ 'relative' : 'cursor',
+                \ 'width' : 50,
+                \ 'height' : 2,
+                \ 'row' : 1,
+                \ 'col' : 1,
+                \ 'style' : 'minimal'
+                \ })
+
+    augroup LTFloatingWin
+        autocmd!
+        autocmd CursorMoved * call s:AutoCloseFloat()
+    augroup END
+
+    return s:lt_temp_win
+endfunction "}}}
+
+function! s:AutoCloseFloat() "{{{
+    call nvim_win_close(s:lt_temp_win, v:true)
+    autocmd! LTFloatingWin
+endfunction "}}}
