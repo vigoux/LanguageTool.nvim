@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Oct 04
+" Last Change:  2019 Oct 06
 " Version:      1.0
 "
 " License: {{{1
@@ -36,14 +36,18 @@ endfunction
 " a:line1 and a:line2 parameters are the first and last line number of
 " the range of line to check.
 " Returns 0 if success, < 0 in case of error.
-function! LanguageTool#check() abort "{{{1
-    " Using window ID is more reliable than window number.
-    " But win_getid() does not exist in old version of Vim.
-    let l:file_content = system('cat ' . expand('%'))
+function! LanguageTool#check(...) abort "{{{1
 
+    " Get configuration for current ft
     let data = LanguageTool#config#get()
-    let data['file'] = '%'
-    let data['text'] = getline(1, line('$'))
+
+    " Get current file content
+    let data.text = nvim_buf_get_lines(nvim_get_current_buf(), 0, -1, v:false)
+
+    " If an argument is given, try to use it as language
+    if !empty(a:000) && !empty(LanguageTool#languages#findLanguage(a:000[0]))
+        let data.language = LanguageTool#languages#findLanguage(a:000[0])
+    endif
 
     call LanguageTool#server#check(data, function('LanguageTool#check#callback'))
 endfunction
@@ -61,12 +65,13 @@ function! LanguageTool#showErrorAtPoint() "{{{1
     let error = LanguageTool#errors#find()
     if !empty(error)
         " Open preview window and get its win_id
-        pedit LanguageToolError
-        wincmd P
-        let win_id = win_getid()
-        exe "norm! \<C-W>\<C-P>"
+        " pedit LanguageToolError
+        " wincmd P
+        " let win_id = win_getid()
+        " exe "norm! \<C-W>\<C-P>"
+        let win_id = LanguageTool#ui#createTemporaryFloatWin()
 
-        call LanguageTool#ui#displayInWindow([l:error], win_id, 'LanguageToolError', s:preview_pp_flags)
+        call LanguageTool#ui#displayInWindow([l:error], win_id, 'LanguageToolError', 'T{s}')
     endif
 endfunction
 

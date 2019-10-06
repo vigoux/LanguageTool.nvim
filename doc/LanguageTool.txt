@@ -306,13 +306,15 @@ The LanguageTool plugin defines the following commands:
 Use this command to run LanguageTool server. It is required to run this
 command before running |:LanguageToolCheck|.
 
-:LanguageToolCheck
+:LanguageToolCheck [language]
                                                           *:LanguageToolCheck*
 
 Use the |:LanguageToolCheck| command to check the grammar in the current
 buffer. This will highlight errors in the buffer and populate the
 location-list for the window.
 Before running this command you need to run |:LanguageToolSetUp|
+If optionnal [language] is provided, LanguageTool.nvim will use it to check
+current text.
 Note: After check is done, a |LanguageToolCheckDone| user event will be
 triggered.
 Warning: LanguageTool don't behave well with tabs, if you encounter errors
