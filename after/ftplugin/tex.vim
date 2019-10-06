@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 13
+" Last Change:  2019 Oct 06
 " Version:      1.0
 "
 " License: {{{1
@@ -13,5 +13,5 @@
 let b:languagetool_preprocess_rules = [
             \ ['^\(\\\%(title\|section\|subsection\|chapter\|paragraph\){\)\(.*\)\(}\)$',
                 \ LanguageTool#preprocess#getOutputAlternate(2, 1)],
-            \ ['^\\.*{.*}$', '{"markup":"{{0}}"}']
+            \ ['^\\.*{.*}\(\s*%.*\)\?$', '{"markup":"{{0}}"}']
             \ ]
