@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Oct 06
+" Last Change:  2019 Oct 07
 " Version:      1.0
 "
 " License: {{{1
@@ -19,6 +19,8 @@ function! LanguageTool#ui#displayInWindow(errors, window, buffername, flags) "{{
         call nvim_buf_set_name(buffer, a:buffername)
     endif
 
+    call nvim_buf_set_option(buffer, 'modifiable', v:true)
+
     let lines_to_put = []
 
     for l:error in a:errors
@@ -33,6 +35,7 @@ function! LanguageTool#ui#displayInWindow(errors, window, buffername, flags) "{{
     call nvim_buf_set_option(buffer, 'bufhidden', 'wipe')
     call nvim_buf_set_option(buffer, 'buflisted', v:false)
     call nvim_buf_set_option(buffer, 'swapfile', v:false)
+    call nvim_buf_set_option(buffer, 'modifiable', v:false)
     call nvim_buf_set_var(buffer, 'errors', a:errors)
 
     call nvim_win_set_buf(a:window, buffer)
@@ -40,20 +43,22 @@ endfunction "}}}1
 
 " This function opens a temporary floatting window that will be closed on CursorMoved
 function! LanguageTool#ui#createTemporaryFloatWin(width, height) "{{{
-    let s:lt_temp_win = nvim_open_win(0, v:false,
-                \ {
-                \ 'relative' : 'cursor',
-                \ 'width' : a:width,
-                \ 'height' : a:height,
-                \ 'row' : 1,
-                \ 'col' : 1,
-                \ 'style' : 'minimal'
-                \ })
+    if !exists('s:lt_temp_win')
+        let s:lt_temp_win = nvim_open_win(0, v:false,
+                    \ {
+                    \ 'relative' : 'cursor',
+                    \ 'width' : a:width,
+                    \ 'height' : a:height,
+                    \ 'row' : 1,
+                    \ 'col' : 1,
+                    \ 'style' : 'minimal'
+                    \ })
 
-    augroup LTFloatingWin
-        autocmd!
-        autocmd CursorMoved * call s:AutoCloseFloat()
-    augroup END
+        augroup LTFloatingWin
+            autocmd!
+            autocmd CursorMoved * call s:AutoCloseFloat()
+        augroup END
+    endif
 
     return s:lt_temp_win
 endfunction "}}}
@@ -61,4 +66,5 @@ endfunction "}}}
 function! s:AutoCloseFloat() "{{{
     call nvim_win_close(s:lt_temp_win, v:true)
     autocmd! LTFloatingWin
+    unlet s:lt_temp_win
 endfunction "}}}
