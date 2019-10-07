@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Oct 04
+" Last Change:  2019 Oct 06
 " Version:      1.0
 "
 " License: {{{1
@@ -13,7 +13,6 @@
 " This functions finds the error at point
 function! LanguageTool#errors#find() "{{{1
     if !exists('b:errors')
-        echoerr 'Please run :LanguageToolCheck'
         return {}
     endif
     let line_byte_index = line2byte('.')

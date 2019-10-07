@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Oct 06
+" Last Change:  2019 Oct 07
 " Version:      1.0
 "
 " License: {{{1
@@ -36,7 +36,7 @@ endfunction
 " a:line1 and a:line2 parameters are the first and last line number of
 " the range of line to check.
 " Returns 0 if success, < 0 in case of error.
-function! LanguageTool#check(...) abort "{{{1
+function! LanguageTool#check(bang, ...) abort "{{{1
 
     " Get configuration for current ft
     let data = LanguageTool#config#get()
@@ -47,6 +47,11 @@ function! LanguageTool#check(...) abort "{{{1
     " If an argument is given, try to use it as language
     if !empty(a:000) && !empty(LanguageTool#languages#findLanguage(a:000[0]))
         let data.language = LanguageTool#languages#findLanguage(a:000[0])
+    endif
+
+    if a:bang
+        let l:current_buffer_name = nvim_buf_get_name(0)
+        call LanguageTool#check#toggle(l:current_buffer_name, empty(a:000) ? '' : a:000[0])
     endif
 
     call LanguageTool#server#check(data, function('LanguageTool#check#callback'))

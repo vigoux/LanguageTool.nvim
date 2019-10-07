@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Oct 06
+" Last Change:  2019 Oct 07
 " Version:      1.0
 "
 " License: {{{1
@@ -69,4 +69,18 @@ function! LanguageTool#check#callback(output) "{{{1
 
     doautocmd User LanguageToolCheckDone
     return 0
-endfunction
+endfunction " }}}
+
+" This functions toggles automatic check for buffer buffername
+function! LanguageTool#check#toggle(buffername, options) "{{{
+    augroup LTBufferAutocmds
+        if exists('b:buffer_toggled')
+            execute printf('autocmd! * %s', a:buffername)
+            unlet b:buffer_toggled
+        else
+            execute printf('autocmd InsertLeave %s call LanguageTool#check(v:false, "%s")', a:buffername, a:options)
+            execute printf('autocmd CursorHoldI %s call LanguageTool#check(v:false, "%s")', a:buffername, a:options)
+            let b:buffer_toggled = 1
+        endif
+    augroup END
+endfunction "}}}
