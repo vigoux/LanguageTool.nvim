@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Oct 07
+" Last Change:  2019 Oct 12
 " Version:      1.0
 "
 " License: {{{1
@@ -13,18 +13,26 @@
 " Set up configuration.
 " Returns 0 if success, < 0 in case of error.
 function! LanguageTool#setup() "{{{1
-    let s:languagetool_server = get(g:, 'languagetool_server', $HOME . '/languagetool/languagetool-server.jar')
+    let s:languagetool_server = get(g:, 'languagetool_server_jar', $HOME . '/languagetool/languagetool-server.jar')
+    let s:languagetool_server_command = get(g:, 'languagetool_server_command', '')
+
     let s:summary_pp_flags = get(g:, 'languagetool_summary_flags', '')
     let s:preview_pp_flags = get(g:, 'languagetool_preview_flags', '')
 
-    if !filereadable(expand(s:languagetool_server, v:true))
-        echomsg "LanguageTool cannot be found at: " . s:languagetool_server
-        echomsg "You need to install LanguageTool and/or set up g:languagetool_server"
-        echomsg "to indicate the location of the languagetool-server.jar file."
-        return -1
+    " If languagetool_server_command is not specified, use jar
+    if empty(s:languagetool_server_command)
+        let s:languagetool_server_command = 'java -cp ' . s:languagetool_server . ' org.languagetool.server.HTTPServer'
+
+        if !filereadable(expand(s:languagetool_server, v:true))
+            echomsg "LanguageTool cannot be found at: " . s:languagetool_server
+            echomsg "You need to install LanguageTool and set up g:languagetool_server_jar"
+            echomsg "to indicate the location of the languagetool-server.jar file"
+            echomsg "or set g:languagetool_server_command to the desired command."
+            return -1
+        endif
     endif
 
-    call LanguageTool#server#start(s:languagetool_server)
+    call LanguageTool#server#start(s:languagetool_server_command)
 
     return 0
 endfunction

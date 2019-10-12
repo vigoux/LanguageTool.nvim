@@ -1,7 +1,7 @@
 *LanguageTool.txt*  A grammar checker in Vim for English, French, German, etc. *LanguageTool*
 
 Author:      Thomas Vigouroux <tomvig38@gmail.com>
-Last Change: 2019 Sep 03
+Last Change: 2019 Oct 12
 
 For Vim version 8.0 and above
 
@@ -172,20 +172,27 @@ of the LanguageTool plugin.
 5.1 Options~
                                                         *languagetool-options*
 
-g:languagetool_server
-                                                       *g:languagetool_server*
+g:languagetool_server_jar
+                                                   *g:languagetool_server_jar*
 
 This variable specifies the location of the LanguageTool java grammar
 checker server. Default is `$HOME/languagetool/languagetool-server.jar`.
 
 Example: >
 
-  :let g:languagetool_server='$HOME/languagetool/languagetool-standalone/target/LanguageTool-4.3-SNAPSHOT/LanguageTool-4.3-SNAPSHOT/languagetool-server.jar'
+  :let g:languagetool_server_jar='$HOME/languagetool/languagetool-standalone/target/LanguageTool-4.3-SNAPSHOT/LanguageTool-4.3-SNAPSHOT/languagetool-server.jar'
 
 g:languagetool_port
 
 This variable specifies the port that will be used by the server.
 Default value is `8081`.
+
+g:languagetool_server_command
+                                               *g:languagetool_server_command*
+
+Set this variable to the command to LanguageTool.nvim should run to start the
+server (without any option). This will be used instead of using
+|g:languagetool_server_jar|.
 
 g:languagetool
                                                               *g:languagetool*

@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 13
+" Last Change:  2019 Oct 12
 " Version:      1.0
 "
 " License: {{{1
@@ -13,12 +13,11 @@
 " This file contains all the server stuff and logic.
 
 " This function starts the server
-function LanguageTool#server#start(file_path) "{{{1
+function LanguageTool#server#start(server_command) "{{{1
     let s:languagetool_port = get(g:, 'languagetool_port', 8081)
 
     " Start the server
-    let s:languagetool_job = jobstart('java -cp '
-              \ . a:file_path . ' org.languagetool.server.HTTPServer --port '
+    let s:languagetool_job = jobstart(a:server_command . ' --port '
               \ . s:languagetool_port,
               \ {'on_stdout': function('LanguageTool#server#stdoutHandler')})
 endfunction
