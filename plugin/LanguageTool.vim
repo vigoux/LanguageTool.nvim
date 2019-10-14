@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Oct 07
+" Last Change:  2019 Oct 09
 " Version:      1.0
 "
 " Long Description: {{{1
@@ -43,7 +43,7 @@ endif
 
 " Defines commands {{{1
 command! -bar -nargs=0 LanguageToolClear :call LanguageTool#clear()
-command! -bar -nargs=? -bang LanguageToolCheck :call LanguageTool#check(<bang>v:false, <f-args>)
+command! -bar -nargs=? -bang -complete=locale LanguageToolCheck :call LanguageTool#check(<bang>v:false, <f-args>)
 command! -bar -nargs=0 LanguageToolErrorAtPoint :call LanguageTool#showErrorAtPoint()
 command! -nargs=0 LanguageToolSummary :call LanguageTool#summary()
 command! -nargs=0 LanguageToolSetUp :call LanguageTool#setup()
