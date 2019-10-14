@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Oct 06
+" Last Change:  2019 Oct 14
 " Version:      1.0
 "
 " License: {{{1
@@ -16,7 +16,7 @@ function! LanguageTool#errors#find() "{{{1
         return {}
     endif
     let line_byte_index = line2byte('.')
-    let current_col = col('.')
+    let current_col = byteidxcomp(getline('.'), col('.'))
 
     let current_byte_idx = line_byte_index + current_col
 
@@ -117,15 +117,15 @@ function! LanguageTool#errors#highlightRegex(error)  "{{{1
     return  '\V' . l:location_prefix . '\<'
     \     . LanguageTool#errors#getText(a:error)
     \     . '\>\ze'
-endfunction
+endfunction "}}}
 
 " This function returns the actual errored text of a:error
-function! LanguageTool#errors#getText(error)
+function! LanguageTool#errors#getText(error) "{{{
     let l:start_idx     = byteidxcomp(a:error.context.text, a:error.context.offset)
     let l:end_idx       = byteidxcomp(a:error.context.text, a:error.context.offset + a:error.context.length) - 1
 
     return substitute(escape(a:error.context.text[l:start_idx : l:end_idx], '''.\'), ' ', '\\_\\s', 'g')
-endfunction
+endfunction "}}}
 
 " This function uses suggestion sug_id to fix error error
 function! LanguageTool#errors#fix(error, sug_id) "{{{1

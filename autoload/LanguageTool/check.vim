@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Oct 07
+" Last Change:  2019 Oct 14
 " Version:      1.0
 "
 " License: {{{1
@@ -18,7 +18,7 @@ function! LanguageTool#check#callback(output) "{{{1
 
     call LanguageTool#clear()
 
-    let l:file_content = join(getline(1, '$'), "\n")
+    let l:file_content = join(nvim_buf_get_lines(0, 0, -1, v:false), "\n")
     let l:languagetool_text_winid = win_getid()
     " Loop on all errors in output of LanguageTool and
     " collect information about all errors in list s:errors
@@ -28,12 +28,12 @@ function! LanguageTool#check#callback(output) "{{{1
 
         " There be dragons, this is true blackmagic happening here, we hardpatch offset field of LT
         " {from|to}{x|y} are not provided by LT JSON API, thus we have to compute them
-        let l:start_byte_index = byteidxcomp(l:file_content, l:error.offset) + 2 " All errrors are offsetted by 2
+        let l:start_byte_index = byteidxcomp(l:file_content, l:error.offset + 1) + 1 " All errrors are offsetted by 2
         let l:error.fromy = byte2line(l:start_byte_index)
         let l:error.fromx = l:start_byte_index - line2byte(l:error.fromy)
         let l:error.start_byte_idx = l:start_byte_index
 
-        let l:stop_byte_index = byteidxcomp(l:file_content, l:error.offset + l:error.length) + 2
+        let l:stop_byte_index = byteidxcomp(l:file_content, l:error.offset + l:error.length + 1) + 1
         " Sometimes the error goes too far to the end of the file
         " causing byte2line to give negative values
         if byte2line(l:stop_byte_index) >= 0

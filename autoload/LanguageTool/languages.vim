@@ -1,6 +1,6 @@
 " LanguageTool: Grammar checker in Vim for English, French, German, etc.
 " Maintainer:   Thomas Vigouroux <tomvig38@gmail.com>
-" Last Change:  2019 Sep 11
+" Last Change:  2019 Oct 14
 " Version:      1.0
 "
 " License: {{{1
@@ -23,16 +23,13 @@ function! s:languageIsSupported(lang) "{{{1
     endfor
 
     return 0
-endfunction
+endfunction "}}}
 
 " Guess language from 'a:lang' (either 'spelllang' or 'v:lang')
 function! LanguageTool#languages#findLanguage(lang) "{{{1
   " This replaces things like en_gb en-GB as expected by LanguageTool,
   " only for languages that support variants in LanguageTool.
-  let l:language = substitute(substitute(a:lang,
-  \  '\(\a\{2,3}\)\(_\a\a\)\?.*',
-  \  '\=tolower(submatch(1)) . toupper(submatch(2))', ''),
-  \  '_', '-', '')
+  let l:language = s:AsLTLang(a:lang)
 
   if s:languageIsSupported(l:language)
     return l:language
@@ -41,7 +38,15 @@ function! LanguageTool#languages#findLanguage(lang) "{{{1
   " Removing the region (if any) and trying again.
   let l:language = substitute(l:language, '-.*', '', '')
   return s:languageIsSupported(l:language) ? l:language : ''
-endfunction
+endfunction "}}}
+
+" This function transforms lang to a LT usable language
+function! s:AsLTLang(lang) "{{{
+    return substitute(substitute(a:lang,
+        \  '\(\a\{2,3}\)\(_\a\a\)\?.*',
+        \  '\=tolower(submatch(1)) . toupper(submatch(2))', ''),
+        \  '_', '-', '')
+endfunction "}}}
 
 " This functions prints all languages supported by the server
 function! LanguageTool#languages#supportedLanguages() "{{{1
