@@ -169,6 +169,12 @@ Add this to your `.vimrc` (this example is for `latex` files)
 autocmd Filetype tex LanguageToolSetUp
 ```
 
+## I have a local LanguageTool server running, I do not want to start a new instance
+You can set `g:languagetool_server_command` to something that prints "Server Started"
+```vim
+let g:languagetool_server_command='echo "Server Started"'
+```
+
 # License
 
 The VIM LICENSE applies to the LanguageTool.nvim plugin (see 
