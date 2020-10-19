@@ -110,12 +110,12 @@ as follows (all lists are comma separated):
     }
 
     {model1} = {
-        'enabledRules' : list of enabled rules,
-        'disabledRules' : list of disabled rules,
-        'enabledCategories' : list of enabled categories,
-        'disabledCategories' : list of disabled categories,
-        'language' : the code of the language to check,
-            as given by :LanguageToolSupportedLanguages
+        'enabledRules' : "list,of,enabled,rules",
+        'disabledRules' : "list,of,disabled,rules",
+        'enabledCategories' : "list,of,enabled,categories",
+        'disabledCategories' : "list,of,disabled,categories",
+        'language' : "the code of the language to check,
+            as given by :LanguageToolSupportedLanguages"
     }
 ```
 
